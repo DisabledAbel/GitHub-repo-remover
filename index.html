@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Repo Remover</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>GitHub Repo Remover</h1>
+      <p class="subtext">
+        Delete repositories with a Personal Access Token (PAT), filter by name/visibility,
+        and keep a 60-day restore queue.
+      </p>
+
+      <section class="card">
+        <h2>Authentication</h2>
+        <label for="token">GitHub PAT (not stored)</label>
+        <div class="token-row">
+          <input id="token" type="password" placeholder="github_pat_..." autocomplete="off" />
+          <button id="toggle-token" type="button">Show</button>
+        </div>
+        <p class="hint">Required scopes: <code>delete_repo</code> for private repos and repo admin access.</p>
+      </section>
+
+      <section class="card">
+        <h2>Repositories</h2>
+        <div class="controls">
+          <button id="load-repos" type="button">Load My Repos</button>
+          <input id="filter-name" type="text" placeholder="Filter by name..." />
+          <select id="filter-visibility">
+            <option value="all">All</option>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Owner</th>
+              <th>Visibility</th>
+              <th>Updated</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="repo-body">
+            <tr><td colspan="5" class="empty">Load repositories to begin.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Restore Queue (60 days)</h2>
+        <p class="hint">
+          GitHub may allow restore for up to 90 days; this app limits restore actions to 60 days.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Repository</th>
+              <th>Deleted</th>
+              <th>Restore by</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="trash-body">
+            <tr><td colspan="4" class="empty">No deleted repositories tracked yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
