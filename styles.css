@@ -1,0 +1,65 @@
+:root {
+  color-scheme: dark;
+  --bg: #101014;
+  --card: #171922;
+  --line: #31364a;
+  --text: #f1f5ff;
+  --subtext: #b8bfd8;
+  --danger: #ff667a;
+  --success: #49d79c;
+  --accent: #5f8dff;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+.container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem 2rem;
+}
+h1 { margin-bottom: 0.35rem; }
+.subtext { color: var(--subtext); margin-top: 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.controls, .token-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+input, select, button {
+  font: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #0f1220;
+  color: var(--text);
+  padding: 0.55rem 0.7rem;
+}
+input[type='text'], input[type='password'] { min-width: 240px; flex: 1; }
+button {
+  cursor: pointer;
+  background: #202741;
+}
+button:hover { filter: brightness(1.1); }
+button.delete { background: #3d1220; border-color: #6f2e44; color: #ffdbe3; }
+button.restore { background: #143726; border-color: #2a6348; color: #d8ffe8; }
+.status { min-height: 1.2rem; margin: 0.5rem 0; color: var(--subtext); }
+.hint { color: var(--subtext); }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 0.55rem 0.4rem;
+}
+.empty { color: var(--subtext); }
+.small { font-size: 0.85rem; color: var(--subtext); }
