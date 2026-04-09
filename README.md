@@ -12,10 +12,6 @@ A static GitHub Pages app for loading, filtering, deleting, and restoring GitHub
 - Attempt restore through the GitHub API when available
 - Fall back to GitHub’s deleted repositories page if API restore is unavailable
 
-## How it works
-
-This app is a client-side web app. There is no backend server.
-
 ### Data flow
 
 1. You paste a GitHub PAT into the token field.
@@ -75,12 +71,6 @@ Deleted repositories are tracked locally in the browser.
 * Use the least-privileged token that can do the job.
 * Do not share the token with anyone.
 * The app stores restore metadata locally, not the token.
-
-## Known behavior
-
-* Deleting a repository is permanent.
-* The app asks for confirmation before deletion.
-* Failed restores show a fallback link to GitHub’s repository recovery page.
 
 ## License
 
