@@ -1,6 +1,6 @@
 const API_BASE = 'https://api.github.com';
 const TRASH_KEY = 'repo-remover-trash-v1';
-const RESTORE_DAYS = 60;
+const RESTORE_DAYS = 90;
 
 let repos = [];
 
@@ -203,7 +203,7 @@ async function deleteRepoById(repoId) {
   addToTrash(repo);
   repos = repos.filter((r) => r.id !== repo.id);
   renderRepos();
-  setStatus(`Deleted ${repo.full_name}. Added to 60-day restore queue.`);
+  setStatus(`Deleted ${repo.full_name}. Added to 90-day restore queue.`);
 }
 
 async function restoreRepo(itemId) {
