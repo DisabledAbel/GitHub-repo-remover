@@ -1,6 +1,6 @@
 const API_BASE = 'https://api.github.com';
 const TRASH_KEY = 'repo-remover-trash-v1';
-const RESTORE_DAYS = 60;
+const RESTORE_DAYS = 90;
 
 let repos = [];
 
@@ -10,6 +10,7 @@ const elements = {
   loadRepos: document.getElementById('load-repos'),
   filterName: document.getElementById('filter-name'),
   filterVisibility: document.getElementById('filter-visibility'),
+  sortBy: document.getElementById('sort-by'),
   repoBody: document.getElementById('repo-body'),
   trashBody: document.getElementById('trash-body'),
   status: document.getElementById('status')
@@ -97,11 +98,24 @@ function formatDate(timestamp) {
 function getFilteredRepos() {
   const nameFilter = elements.filterName.value.trim().toLowerCase();
   const vis = elements.filterVisibility.value;
+  const sortBy = elements.sortBy.value;
 
-  return repos.filter((repo) => {
+  const filtered = repos.filter((repo) => {
     const nameMatch = !nameFilter || repo.name.toLowerCase().includes(nameFilter);
     const visMatch = vis === 'all' || (vis === 'public' && !repo.private) || (vis === 'private' && repo.private);
     return nameMatch && visMatch;
+  });
+
+  return filtered.sort((a, b) => {
+    if (sortBy === 'stars') {
+      return b.stargazers_count - a.stargazers_count || new Date(b.updated_at) - new Date(a.updated_at);
+    }
+
+    if (sortBy === 'archived') {
+      return Number(b.archived) - Number(a.archived) || new Date(b.updated_at) - new Date(a.updated_at);
+    }
+
+    return new Date(b.updated_at) - new Date(a.updated_at);
   });
 }
 
@@ -109,7 +123,7 @@ function renderRepos() {
   const list = getFilteredRepos();
 
   if (!list.length) {
-    elements.repoBody.innerHTML = '<tr><td colspan="5" class="empty">No repositories match this filter.</td></tr>';
+    elements.repoBody.innerHTML = '<tr><td colspan="7" class="empty">No repositories match this filter.</td></tr>';
     return;
   }
 
@@ -120,6 +134,8 @@ function renderRepos() {
         <td>${repo.name}</td>
         <td>${repo.owner.login}</td>
         <td>${repo.private ? 'Private' : 'Public'}</td>
+        <td>${repo.archived ? 'Yes' : 'No'}</td>
+        <td>${repo.stargazers_count}</td>
         <td>${new Date(repo.updated_at).toLocaleString()}</td>
         <td><button class="delete" data-delete-id="${repo.id}">Delete</button></td>
       </tr>
@@ -187,7 +203,7 @@ async function deleteRepoById(repoId) {
   addToTrash(repo);
   repos = repos.filter((r) => r.id !== repo.id);
   renderRepos();
-  setStatus(`Deleted ${repo.full_name}. Added to 60-day restore queue.`);
+  setStatus(`Deleted ${repo.full_name}. Added to 90-day restore queue.`);
 }
 
 async function restoreRepo(itemId) {
@@ -268,6 +284,7 @@ elements.loadRepos.addEventListener('click', () => {
 
 elements.filterName.addEventListener('input', renderRepos);
 elements.filterVisibility.addEventListener('change', renderRepos);
+elements.sortBy.addEventListener('change', renderRepos);
 elements.repoBody.addEventListener('click', handleTableClick);
 elements.trashBody.addEventListener('click', handleTableClick);
 

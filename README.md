@@ -47,7 +47,7 @@ Deleted repositories are tracked locally in the browser.
 
 - Stored in `localStorage`
 - Includes repository name, owner, visibility, delete time, expiration time, and restore state
-- Enforced restore window: 60 days
+- Enforced restore window: 90 days
 - A repository is marked as restored after a successful restore request
 
 ## Limitations
