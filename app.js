@@ -203,7 +203,7 @@ async function deleteRepoById(repoId) {
   addToTrash(repo);
   repos = repos.filter((r) => r.id !== repo.id);
   renderRepos();
-  setStatus(`Deleted ${repo.full_name}. Added to ${RESTORE_DAYS}-day restore queue.`);
+  setStatus(`Deleted ${repo.full_name}. Added to 90-day restore queue.`);
 }
 
 async function restoreRepo(itemId) {
