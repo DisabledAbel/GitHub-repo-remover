@@ -34,6 +34,11 @@
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
+          <select id="sort-by" aria-label="Sort by">
+            <option value="updated">Sort: Last updated</option>
+            <option value="archived">Sort: Archived first</option>
+            <option value="stars">Sort: Stars</option>
+          </select>
         </div>
 
         <div id="status" class="status"></div>
@@ -44,12 +49,14 @@
               <th>Name</th>
               <th>Owner</th>
               <th>Visibility</th>
+              <th>Archived</th>
+              <th>Stars</th>
               <th>Updated</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="repo-body">
-            <tr><td colspan="5" class="empty">Load repositories to begin.</td></tr>
+            <tr><td colspan="7" class="empty">Load repositories to begin.</td></tr>
           </tbody>
         </table>
       </section>
