@@ -63,7 +63,15 @@ Deleted repositories are tracked locally in the browser.
 - `index.html` — UI markup
 - `styles.css` — styling
 - `app.js` — repository loading, filtering, deletion, and restore logic
+- `scripts/check-restore-days.js` — checks GitHub docs for restore-window changes and updates project constants
 - `LICENSE` — project license
+
+## Automation
+
+- GitHub Actions workflow: `.github/workflows/check-restore-window.yml`
+- Runs every 24 hours plus manual dispatch
+- Reads GitHub’s “Restoring a deleted repository” docs page
+- If restore-window days changed, updates `app.js` and this README, then commits the change
 
 ## Security notes
 
