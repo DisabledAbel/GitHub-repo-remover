@@ -69,7 +69,6 @@ Deleted repositories are tracked locally in the browser.
 ## Automation
 
 - GitHub Actions workflow: `.github/workflows/check-restore-window.yml`
-- Runs every 24 hours plus manual dispatch
 - Reads GitHub’s “Restoring a deleted repository” docs page
 - If restore-window days changed, updates `app.js` and this README, then commits the change
 
