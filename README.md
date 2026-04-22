@@ -34,6 +34,8 @@ The app uses these GitHub REST API endpoints:
 
 Use a GitHub PAT with permission to manage the repositories you want to delete or restore.
 
+- Create a classic PAT prefilled with `repo` and `delete_repo` scopes: https://github.com/settings/tokens/new?scopes=repo,delete_repo&description=GitHub%20Repo%20Remover
+
 Notes:
 
 - The token is only read from the browser input field.
