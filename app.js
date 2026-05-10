@@ -248,28 +248,43 @@ async function restoreRepo(itemId) {
     return;
   }
 
-  setStatus(`Attempting restore for ${item.full_name}...`);
+  try {
+    setStatus(`Attempting restore for ${item.full_name}...`);
 
-  const res = await fetch(`${API_BASE}/repos/${item.owner}/${item.name}/restore`, {
-    method: 'POST',
-    headers: authHeaders(token)
-  });
+    const res = await fetch(`${API_BASE}/repos/${item.owner}/${item.name}/restore`, {
+      method: 'POST',
+      headers: authHeaders(token)
+    });
 
-  // GitHub restore API returns 201 Created on successful restore
-  if (res.status === 201 || res.status === 202) {
-    item.restored = true;
-    saveTrash(trash);
-    renderTrash();
-    setStatus(`Restore requested for ${item.full_name}.`);
-    return;
+    // GitHub restore API returns 201 Created on successful restore
+    // Also handle 404 (not found/deleted too long ago) and 403 (forbidden)
+    if (res.status === 201 || res.status === 202) {
+      item.restored = true;
+      saveTrash(trash);
+      renderTrash();
+      setStatus(`Restore requested for ${item.full_name}.`);
+      return;
+    }
+
+    // Handle specific error cases
+    if (res.status === 404) {
+      setStatus('Repository not found - may have been permanently deleted or restore window expired.', true);
+      return;
+    }
+    if (res.status === 403) {
+      setStatus('Access forbidden - check token has repo admin permissions.', true);
+      return;
+    }
+
+    const fallbackUrl = `https://github.com/settings/repositories`;
+    const text = await res.text().catch(() => '');
+    setStatus(
+      `Automatic restore failed (HTTP ${res.status}): ${text || 'Unknown error'}. Use GitHub Deleted Repositories UI: ${fallbackUrl}`,
+      true
+    );
+  } catch (error) {
+    setStatus(`Restore error: ${error.message}`, true);
   }
-
-  const fallbackUrl = `https://github.com/settings/repositories`;
-  const text = await res.text().catch(() => '');
-  setStatus(
-    `Automatic restore failed (HTTP ${res.status}): ${text || 'Unknown error'}. Use GitHub Deleted Repositories UI: ${fallbackUrl}`,
-    true
-  );
 }
 
 function handleTableClick(event) {
