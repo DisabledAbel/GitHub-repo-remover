@@ -215,7 +215,10 @@ async function restoreRepo(itemId) {
 
   const trash = loadTrash();
   const item = trash.find((i) => i.id === Number(itemId));
-  if (!item) return;
+  if (!item) {
+    setStatus('Item not found in trash queue.', true);
+    return;
+  }
 
   const now = Date.now();
   if (item.restored || now > item.expiresAt) {
@@ -230,7 +233,8 @@ async function restoreRepo(itemId) {
     headers: authHeaders(token)
   });
 
-  if (res.ok || res.status === 202) {
+  // GitHub restore API returns 201 Created on successful restore
+  if (res.status === 201 || res.status === 202) {
     item.restored = true;
     saveTrash(trash);
     renderTrash();
@@ -239,8 +243,9 @@ async function restoreRepo(itemId) {
   }
 
   const fallbackUrl = `https://github.com/settings/repositories`;
+  const text = await res.text().catch(() => '');
   setStatus(
-    `Automatic restore failed (HTTP ${res.status}). Use GitHub Deleted Repositories UI: ${fallbackUrl}`,
+    `Automatic restore failed (HTTP ${res.status}): ${text || 'Unknown error'}. Use GitHub Deleted Repositories UI: ${fallbackUrl}`,
     true
   );
 }
