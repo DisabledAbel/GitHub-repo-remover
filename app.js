@@ -173,19 +173,18 @@ function renderTrash() {
           <td>${formatDate(item.deletedAt)}</td>
           <td>${formatDate(item.expiresAt)}<div class="small">${statusText}</div></td>
           <td>
-            <button class="restore-btn" data-restore-id="${item.id}" ${disabled ? 'disabled' : ''}>Restore</button>
+            <button type="button" class="restore-btn" data-restore-id="${item.id}" ${disabled ? 'disabled' : ''}>Restore</button>
           </td>
         </tr>
       `;
     })
     .join('');
 
-  // Add direct event listeners to restore buttons
-  elements.trashBody.querySelectorAll('.restore-btn:not([disabled])').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      const id = e.target.dataset.restoreId;
-      restoreRepo(id).catch((err) => setStatus(err.message, true));
-    });
+  // Attach click handlers
+  elements.trashBody.querySelectorAll('.restore-btn').forEach((btn) => {
+    if (!btn.disabled) {
+      btn.onclick = () => restoreRepo(btn.dataset.restoreId);
+    }
   });
 }
 
