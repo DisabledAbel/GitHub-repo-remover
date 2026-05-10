@@ -184,8 +184,6 @@ function renderTrash() {
   elements.trashBody.querySelectorAll('.restore-btn:not([disabled])').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const id = e.target.dataset.restoreId;
-      console.log('Direct event listener for restore, id:', id);
-      alert('Restore clicked: ' + id);
       restoreRepo(id).catch((err) => setStatus(err.message, true));
     });
   });
