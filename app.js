@@ -43,8 +43,14 @@ async function fetchAllRepos(token) {
     });
 
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Failed loading repos (HTTP ${res.status}): ${text || 'Unknown error'}`);
+      let text = 'Unknown error';
+      try {
+        const errorBody = await res.text();
+        text = errorBody || `HTTP error ${res.status}`;
+      } catch {
+        text = `HTTP error ${res.status}`;
+      }
+      throw new Error(text);
     }
 
     const batch = await res.json();
@@ -183,7 +189,10 @@ async function deleteRepoById(repoId) {
   }
 
   const repo = repos.find((r) => r.id === Number(repoId));
-  if (!repo) return;
+  if (!repo) {
+    setStatus('Repository not found in loaded list.', true);
+    return;
+  }
 
   const ok = window.confirm(`Delete ${repo.full_name}? This is destructive.`);
   if (!ok) return;
@@ -196,8 +205,14 @@ async function deleteRepoById(repoId) {
   });
 
   if (res.status !== 204) {
-    const text = await res.text();
-    throw new Error(`Delete failed (HTTP ${res.status}): ${text || 'Unknown error'}`);
+    let text = 'Unknown error';
+    try {
+      const errorBody = await res.text();
+      text = errorBody || `HTTP error ${res.status}`;
+    } catch {
+      text = `HTTP error ${res.status}`;
+    }
+    throw new Error(`Delete failed: ${text}`);
   }
 
   addToTrash(repo);
