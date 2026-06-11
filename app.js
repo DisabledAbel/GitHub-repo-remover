@@ -180,12 +180,6 @@ function renderTrash() {
     })
     .join('');
 
-  // Attach click handlers
-  elements.trashBody.querySelectorAll('.restore-btn').forEach((btn) => {
-    if (!btn.disabled) {
-      btn.onclick = () => restoreRepo(btn.dataset.restoreId);
-    }
-  });
 }
 
 async function deleteRepoById(repoId) {
@@ -283,7 +277,11 @@ async function restoreRepo(itemId) {
       true
     );
   } catch (error) {
-    setStatus(`Restore error: ${error.message}`, true);
+    const fallbackUrl = `https://github.com/settings/repositories`;
+    setStatus(
+      `Restore error: ${error.message}. Use GitHub Deleted Repositories UI: ${fallbackUrl}`,
+      true
+    );
   }
 }
 
@@ -327,6 +325,8 @@ elements.loadRepos.addEventListener('click', () => {
 elements.filterName.addEventListener('input', renderRepos);
 elements.filterVisibility.addEventListener('change', renderRepos);
 elements.sortBy.addEventListener('change', renderRepos);
+// Use event delegation for delete and restore buttons in tables.
+// This handles buttons added dynamically and avoids duplicate listeners.
 elements.repoBody.addEventListener('click', handleTableClick);
 elements.trashBody.addEventListener('click', handleTableClick);
 
